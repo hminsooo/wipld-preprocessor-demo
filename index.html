@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="WIPL-D 전처리기의 6단계 작업 흐름을 설치 없이 체험하는 웹 데모. 가상 안테나 배치, Case 구성, 모의 실행을 제공합니다."
+    />
+    <meta name="theme-color" content="#142c32" />
+    <title>WIPL-D Preprocessor · Interactive demo</title>
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="demo.js" defer></script>
+  </head>
+  <body>
+    <svg
+      class="icon-definitions"
+      aria-hidden="true"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <symbol id="i-plus" viewBox="0 0 24 24">
+        <path d="M12 5v14M5 12h14" />
+      </symbol>
+      <symbol id="i-arrow" viewBox="0 0 24 24">
+        <path d="M5 12h14m-5-5 5 5-5 5" />
+      </symbol>
+      <symbol id="i-check" viewBox="0 0 24 24">
+        <path d="m5 12 4 4L19 6" />
+      </symbol>
+      <symbol id="i-reset" viewBox="0 0 24 24">
+        <path d="M4 10a8 8 0 1 1 1 8M4 4v6h6" />
+      </symbol>
+      <symbol id="i-download" viewBox="0 0 24 24">
+        <path d="M12 3v12m-4-4 4 4 4-4M4 16v5h16v-5" />
+      </symbol>
+      <symbol id="i-play" viewBox="0 0 24 24">
+        <path d="m8 4 12 8-12 8Z" />
+      </symbol>
+      <symbol id="i-info" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="9" />
+        <path d="M12 11v6m0-10v1" />
+      </symbol>
+      <symbol id="i-close" viewBox="0 0 24 24">
+        <path d="m6 6 12 12M18 6 6 18" />
+      </symbol>
+      <symbol id="i-cube" viewBox="0 0 24 24">
+        <path d="m12 2 9 5v10l-9 5-9-5V7Zm0 10 9-5m-9 5-9-5m9 5v10" />
+      </symbol>
+      <symbol id="i-trash" viewBox="0 0 24 24">
+        <path d="M3 6h18M9 6V3h6v3M6 6l1 15h10l1-15M10 10v7m4-7v7" />
+      </symbol>
+      <symbol id="i-focus" viewBox="0 0 24 24">
+        <path d="M8 3H3v5m13-5h5v5M3 16v5h5m8 0h5v-5" />
+        <circle cx="12" cy="12" r="3" />
+      </symbol>
+    </svg>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <a class="brand" href="#mounting" aria-label="WIPL-D Preprocessor 홈">
+          <span class="brand-mark">w<span>↗</span></span>
+          <span><strong>WIPL-D</strong><small>PREPROCESSOR</small></span>
+        </a>
+        <div class="sidebar-caption">WORKFLOW <span>6 STEPS</span></div>
+        <nav id="workflow-nav" aria-label="전처리 작업 단계">
+          <button data-step="project">
+            <span class="step-number">01</span
+            ><span>프로젝트 입력<small>Project / input</small></span
+            ><span class="nav-status"></span>
+          </button>
+          <button data-step="mounting">
+            <span class="step-number">02</span
+            ><span>안테나 배치<small>Antenna mounting</small></span
+            ><span class="nav-status"></span>
+          </button>
+          <button data-step="analysis">
+            <span class="step-number">03</span
+            ><span>해석 설정<small>Analysis</small></span
+            ><span class="nav-status"></span>
+          </button>
+          <button data-step="cases">
+            <span class="step-number">04</span
+            ><span>Case 구성<small>Case plan</small></span
+            ><span class="nav-status"></span>
+          </button>
+          <button data-step="generate">
+            <span class="step-number">05</span
+            ><span>생성 · 검증<small>Generate & verify</small></span
+            ><span class="nav-status"></span>
+          </button>
+          <button data-step="run">
+            <span class="step-number">06</span
+            ><span>실행 · 로그<small>Run & logs</small></span
+            ><span class="nav-status"></span>
+          </button>
+        </nav>
+        <div class="sidebar-bottom">
+          <div class="demo-mode">
+            <span class="live-dot"></span>INTERACTIVE DEMO
+          </div>
+          <p>아이디어를 배치하고,<br />해석의 흐름을 경험하세요.</p>
+          <button class="sidebar-help" data-action="help">
+            데모 사용 안내 <span>↗</span>
+          </button>
+          <div class="sidebar-version">WEB EDITION <span>v1.0</span></div>
+        </div>
+      </aside>
+      <div class="main-shell">
+        <header class="topbar">
+          <div class="project-identity">
+            <span class="project-icon">P</span>
+            <div>
+              <span class="overline">SAMPLE PROJECT</span
+              ><strong id="project-label">AERIS · Concept platform</strong>
+            </div>
+          </div>
+          <div class="toolbar">
+            <button
+              class="button quiet"
+              data-action="reset"
+              aria-label="샘플 초기화"
+            >
+              <svg><use href="#i-reset" /></svg><span>초기화</span></button
+            ><button
+              class="button quiet"
+              data-action="export"
+              aria-label="설정 내보내기"
+            >
+              <svg><use href="#i-download" /></svg
+              ><span>설정 내보내기</span></button
+            ><button
+              class="button quiet"
+              data-action="help"
+              aria-label="데모 사용 안내"
+              title="데모 사용 안내"
+            >
+              <svg><use href="#i-info" /></svg></button
+            ><button class="button accent" data-action="tour">
+              <svg><use href="#i-play" /></svg><span>빠른 체험</span>
+            </button>
+          </div>
+        </header>
+        <main>
+          <div class="demo-notice">
+            <svg><use href="#i-info" /></svg
+            ><span
+              ><strong>브라우저 UI 데모</strong> · 가상 플랫폼과 샘플 데이터로
+              동작합니다. WIPL-D 계산·CAD 변환은 수행하지 않습니다.</span
+            >
+          </div>
+          <div class="page-heading">
+            <div>
+              <div id="step-eyebrow" class="overline">
+                02 / ANTENNA MOUNTING
+              </div>
+              <h1 id="step-title">안테나 배치</h1>
+              <p id="step-description">
+                플랫폼 위에 안테나를 배치하고, 공통 Base를 준비하세요.
+              </p>
+            </div>
+            <div class="project-metrics" id="project-metrics"></div>
+          </div>
+          <div class="workspace">
+            <div
+              id="content"
+              class="workflow-content"
+              aria-label="현재 단계 작업 화면"
+            ></div>
+            <aside class="viewport-card" aria-label="가상 플랫폼 3D 미리보기">
+              <div class="card-heading">
+                <div>
+                  <span class="overline">ASSEMBLY PREVIEW</span>
+                  <h2>플랫폼 미리보기</h2>
+                </div>
+                <span class="tag neutral">CONCEPT MODEL</span>
+              </div>
+              <div class="viewport-toolbar">
+                <div class="segmented" aria-label="3D 시점">
+                  <button class="active" data-view="iso">ISO</button
+                  ><button data-view="top">TOP</button
+                  ><button data-view="side">SIDE</button>
+                </div>
+                <div class="view-options">
+                  <label
+                    ><input id="show-frames" type="checkbox" checked />
+                    좌표계</label
+                  ><label><input id="show-mesh" type="checkbox" /> 메시</label>
+                </div>
+              </div>
+              <div class="canvas-wrap">
+                <canvas
+                  id="assembly-canvas"
+                  tabindex="0"
+                  role="img"
+                  aria-label="드래그로 회전하고 휠로 확대하는 가상 회전익 플랫폼. 안테나 선택은 아래 목록에서도 가능합니다."
+                ></canvas>
+                <div class="canvas-label">
+                  <span class="live-dot"></span>LIVE PREVIEW
+                  <small>가상 개념 형상</small>
+                </div>
+                <div class="canvas-scale">m <span>────</span> 2.0</div>
+                <div class="canvas-controls">
+                  <button data-camera="zoom-in" aria-label="미리보기 확대">
+                    +</button
+                  ><button data-camera="zoom-out" aria-label="미리보기 축소">
+                    −</button
+                  ><button data-camera="reset" aria-label="3D 시점 초기화">
+                    <svg><use href="#i-focus" /></svg>
+                  </button>
+                </div>
+                <div class="canvas-hint">
+                  드래그 회전 <span>·</span> 휠 확대
+                </div>
+              </div>
+              <div class="viewport-selection" id="viewport-selection"></div>
+              <div class="viewer-legend" id="viewer-legend"></div>
+              <div class="viewport-footer">
+                <span>독립 제작한 샘플 형상 · 실제 CAD 자료 미포함</span
+                ><span id="view-coordinate">ISO VIEW</span>
+              </div>
+            </aside>
+          </div>
+          <footer class="app-footer">
+            <span
+              ><span class="live-dot"></span> 설정은 이 브라우저에만
+              저장됩니다.</span
+            ><span
+              >WIPL-D Preprocessor <span class="footer-divider">/</span> Web
+              demonstration</span
+            >
+          </footer>
+        </main>
+      </div>
+    </div>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <dialog id="modal"><div id="modal-content"></div></dialog>
+    <noscript
+      ><p class="noscript">
+        이 웹 데모는 JavaScript를 켜야 사용할 수 있습니다.
+      </p></noscript
+    >
+  </body>
+</html>
